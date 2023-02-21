@@ -1,16 +1,10 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
-import { useState } from "react";
 import YouTube from "react-youtube";
-
+import {API_KEY, API_URL, IMAGE_PATH, URL_IMAGE} from "./api/Api.js"
+import { type } from "@testing-library/user-event/dist/type";
 function App() {
-  const API_URL = "https://api.themoviedb.org/3";
-  const API_KEY = "2ae024c6066b22558afca85a335eb79b";
-  const IMAGE_PATH = "https://image.tmdb.org/t/p/original";
-
-  // endpoint para las imagenes
-  const URL_IMAGE = "https://image.tmdb.org/t/p/original";
 
   // variables de estado
   const [movies, setMovies] = useState([]);
@@ -21,6 +15,8 @@ function App() {
   const [playing, setPlaying] = useState(false);
 
   // funcion para realizar la peticion get a la api
+
+  
   const fetchMovies = async (searchKey) => {
     const type = searchKey ? "search" : "discover";
     const {
@@ -38,9 +34,15 @@ function App() {
     if (results.length) {
       await fetchMovie(results[0].id);
     }
-  };
+  }
+
+
+
 
   // funcion para la peticion de un solo objeto y mostrar en reproductor de videos
+
+ 
+
   const fetchMovie = async (id) => {
     const { data } = await axios.get(`${API_URL}/movie/${id}`, {
       params: {
@@ -59,6 +61,7 @@ function App() {
     setMovie(data);
   };
 
+
   const selectMovie = async (movie) => {
     fetchMovie(movie.id);
 
@@ -76,29 +79,56 @@ function App() {
     fetchMovies();
   }, []);
 
+
+// const to change decrease float for dates and vote
+  const releaseDate = () => {
+    return parseFloat(movie.release_date).toFixed()
+
+  } 
+  
+  
+const averageVote = () => {
+
+  return parseFloat(movie.vote_average).toFixed(1)
+}
+
+
+
+// ------------------------------------ HTML --------------------------------
+
+
   return (
     <div>
-      <h2 className="text-center mt-5 mb-5">321 Movies</h2>
-
+     
       {/* el buscador */}
-      <form className="container mb-4" onSubmit={searchMovies}>
+      <form className="container mx-2 mb-4 d-flex" onSubmit={searchMovies}>
         <input
           type="text"
           placeholder="search"
           onChange={(e) => setSearchKey(e.target.value)}
         />
-        <button className="btn btn-primary mx-2 ">Go</button>
+        <button className="btn btn-primary mx-2">Go</button>
       </form>
 
       <div>
         <main>
+        
           {movie ? (
             <div
               className="viewtrailer"
               style={{
                 backgroundImage: `url("${IMAGE_PATH}${movie.backdrop_path}")`,
               }}
+              
             >
+<a href="/" className="text-decoration-none text-white">
+              <div className="text-center d-flex flex-row justify-content-center align-items-center">
+<img className="nav-logo" alt="logo" src="https://cdn-icons-png.flaticon.com/512/168/168818.png"></img>
+      <h2 className="text-center ms-2">321 Movies</h2>
+
+      </div>
+
+</a>
               {playing ? (
                 <>
                   <YouTube
@@ -110,7 +140,7 @@ function App() {
                       height: "100%",
                       playerVars: {
                         autoplay: 1,
-                        controls: 0,
+                        controls: 1,
                         cc_load_policy: 0,
                         fs: 0,
                         iv_load_policy: 0,
@@ -139,8 +169,8 @@ function App() {
                       "Sorry, no trailer available"
                     )}
                     <h1 className="text-white">{movie.title}</h1>
-                    <h2 className="text-white">{movie.release_date}</h2>
-                    <h2 className="text-white">{movie.vote_average}</h2>
+                    <h2 className="text-white">{releaseDate()}</h2>
+                    <h2 className="text-white">Score: {averageVote()}</h2>
                     <p className="text-white">{movie.overview}</p>
                   </div>
                 </div>
@@ -160,12 +190,13 @@ function App() {
               onClick={() => selectMovie(movie)}
             >
               <img
+              className="rounded-2"
                 src={`${URL_IMAGE + movie.poster_path}`}
                 alt=""
                 height={600}
                 width="100%"
               />
-              <h4 className="text-center">{movie.title}</h4>
+              <h4 className="text-center mt-2">{`${movie.title} (${parseFloat(movie.release_date).toFixed()})`}</h4>
             </div>
           ))}
         </div>

@@ -1,5 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloock&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,700;7..72,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Gloock&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Literata:opsz,wght@7..72,400;7..72,700;7..72,900&display=swap");
 body {
   margin: 0;
   font-family: "Literata", sans-serif;
@@ -10,17 +14,11 @@ body {
   color: white;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
-
 header {
-  font-weight: 600;
-  display: flex;
   margin-left: 10px;
 }
 
-h1,h2 {
+h1,
+h2 {
   font-weight: 900;
 }

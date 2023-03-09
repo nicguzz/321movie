@@ -1,12 +1,10 @@
-import { React, useEffect, useState, createContext } from "react";
+import { React, useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 import { API_KEY, API_URL } from "./api/Api.js";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import MoviesList from "./components/MoviesList";
-
-export const searchContext = createContext();
 
 function App() {
   // state variables
@@ -33,6 +31,18 @@ function App() {
 
     setMovies(results);
     setMovie(results[0]);
+  };
+
+  const fetchMoviesNav = async (searchKey) => {
+    const type = searchKey ? "search" : "discover";
+    const {
+      data: { results },
+    } = await axios.get(`${API_URL}/${type}/movie`, {
+      params: {
+        api_key: API_KEY,
+        query: searchKey,
+      },
+    });
 
     if (results.length) {
       await fetchMovie(results[0].id);
@@ -40,6 +50,9 @@ function App() {
     } else {
       setitemFound(false);
     }
+
+    setMovies(results);
+    setMovie(results[0]);
   };
 
   // function to call only 1 movie and to show it on Hero
@@ -71,15 +84,26 @@ function App() {
 
   // function to search movies
   const searchMovies = (e) => {
-    console.log("function is being called");
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+    }
+
     fetchMovies(searchKey);
-    console.log(`searchKey is: ${searchKey}`);
+  };
+
+  const searchMoviesNav = (e) => {
+    if (e) {
+      e.preventDefault();
+    }
+
+    fetchMoviesNav(searchKey);
   };
 
   useEffect(() => {
     fetchMovies();
   }, []);
+
+  console.log(`itemfound is set to ${itemFound}`);
 
   // ------------------------------------ HTML --------------------------------
 
@@ -87,7 +111,16 @@ function App() {
     <div>
       <div>
         <main>
-          <Navbar setSearchKey={setSearchKey} searchMovies={searchMovies} />
+          <Navbar
+            setSearchKey={setSearchKey}
+            searchKey={searchKey}
+            // searchMovies={searchMovies}
+            setMovies={setMovies}
+            movies={movies}
+            itemFound={itemFound}
+            selectMovie={selectMovie}
+            searchMoviesNav={searchMoviesNav}
+          />
 
           <Hero
             trailer={trailer}

@@ -1,7 +1,19 @@
 import React from "react";
+import { useState, useEffect } from "react";
 // import searchMovies from "../App";
 
 const Navbar = (props) => {
+  // const [results, setResults] = useState([]);
+
+  const handleInputChange = (e) => {
+    props.setSearchKey(e.target.value);
+  };
+
+  // usar useffect ahora
+  useEffect(() => {
+    // Perform the search whenever the query changes
+    props.searchMoviesNav();
+  }, [props.searchKey]);
   return (
     <header>
       <div className="grid grid-cols-5 gap-4">
@@ -16,15 +28,31 @@ const Navbar = (props) => {
           </div>
         </a>
         <div className="col-start-2 col-end-5">
-          <form className="flex h-full gap-8" onSubmit={props.searchMovies}>
+          <form className="flex h-10 gap-8" onSubmit={props.searchMoviesNav}>
             <input
               type="text"
+              value={props.searchKey}
               placeholder="search"
-              onChange={(e) => props.setSearchKey(e.target.value)}
+              onChange={handleInputChange}
               className="w-full h-full text-black"
             />
             <button className="">Go</button>
           </form>
+          <ul className="h-full">
+            {props.itemFound ? (
+              props.movies.map((result) => (
+                <li
+                  key={result}
+                  className="bg-zinc-400 text-black h-10 hover:text-white cursor-pointer border"
+                  onClick={() => props.selectMovie(result)}
+                >
+                  {result.original_title}
+                </li>
+              ))
+            ) : (
+              <li>Nothing to display</li>
+            )}
+          </ul>
         </div>
 
         <div className="flex flex-row items-center gap-3 justify-end">

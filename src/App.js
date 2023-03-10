@@ -10,6 +10,7 @@ function App() {
   // state variables
   const [movies, setMovies] = useState([]);
   const [searchKey, setSearchKey] = useState("");
+  const [moviesNav, setMoviesNav] = useState([]);
 
   const [trailer, setTrailer] = useState(null);
   const [movie, setMovie] = useState({ title: "Loading Movies" });
@@ -33,7 +34,7 @@ function App() {
     setMovie(results[0]);
   };
 
-  const fetchMoviesNav = async (searchKey) => {
+  const onTypingResults = async (searchKey) => {
     const type = searchKey ? "search" : "discover";
     const {
       data: { results },
@@ -44,15 +45,7 @@ function App() {
       },
     });
 
-    if (results.length) {
-      await fetchMovie(results[0].id);
-      setitemFound(true);
-    } else {
-      setitemFound(false);
-    }
-
-    setMovies(results);
-    setMovie(results[0]);
+    setMoviesNav(results);
   };
 
   // function to call only 1 movie and to show it on Hero
@@ -87,23 +80,18 @@ function App() {
     if (e) {
       e.preventDefault();
     }
-
     fetchMovies(searchKey);
-  };
-
-  const searchMoviesNav = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
-
-    fetchMoviesNav(searchKey);
   };
 
   useEffect(() => {
     fetchMovies();
   }, []);
 
-  console.log(`itemfound is set to ${itemFound}`);
+  //this function is supposed to, when clicking on on type result, the hero to be loaded and also the movie list.
+  // function onClickNav(result) {
+  //   selectMovie(result);
+  //   searchMovies();
+  // }
 
   // ------------------------------------ HTML --------------------------------
 
@@ -114,12 +102,13 @@ function App() {
           <Navbar
             setSearchKey={setSearchKey}
             searchKey={searchKey}
-            // searchMovies={searchMovies}
             setMovies={setMovies}
             movies={movies}
             itemFound={itemFound}
             selectMovie={selectMovie}
-            searchMoviesNav={searchMoviesNav}
+            searchMovies={searchMovies}
+            onTypingResults={onTypingResults}
+            moviesNav={moviesNav}
           />
 
           <Hero

@@ -4,11 +4,11 @@ function moviesList(props) {
   /* contenedor para mostrar los posters y las peliculas en la peticion a la api */
   return (
     <div className=" mt-3">
-      <div className="grid grid-cols-4 gap-6">
+      <div className="grid grid-cols-4 gap-6 px-4">
         {props.movies.map((movie) => (
           <div
             key={movie.id}
-            className=" mb-3"
+            className="mb-3 cursor-pointer"
             onClick={() => props.selectMovie(movie)}
           >
             <img

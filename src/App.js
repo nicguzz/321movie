@@ -87,12 +87,6 @@ function App() {
     fetchMovies();
   }, []);
 
-  //this function is supposed to, when clicking on on type result, the hero to be loaded and also the movie list.
-  // function onClickNav(result) {
-  //   selectMovie(result);
-  //   searchMovies();
-  // }
-
   // ------------------------------------ HTML --------------------------------
 
   return (
